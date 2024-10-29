@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
-import { urlApi } from '../../Api'
-import Layout from "../../Components/Layout"
-import Card from "../../Components/Card"
+import { useState, useEffect } from 'react';
+import { urlApi } from '../../Api';
+import Layout from '../../Components/Layout';
+import Card from '../../Components/Card';
+import ProductDetail from '../../Components/ProductDetail';
 
 function Home() {
     const [items, setItems] = useState(null);
@@ -9,7 +10,7 @@ function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(urlApi(0, 20));
+                const response = await fetch(urlApi(0, 70));
                 const data = await response.json();
                 setItems(data);
             } catch (e) {
@@ -30,6 +31,7 @@ function Home() {
                     ))
                 }
             </div>
+            <ProductDetail />
         </Layout>
   )
 }
