@@ -3,6 +3,7 @@ import { urlApi } from '../../Api';
 import Layout from '../../Components/Layout';
 import Card from '../../Components/Card';
 import ProductDetail from '../../Components/ProductDetail';
+import CheckoutSideMenu from '../../Components/CheckoutSideMenu';
 
 function Home() {
     const [items, setItems] = useState(null);
@@ -20,10 +21,10 @@ function Home() {
 
         fetchData();
     }, [])
+    
 
     return (
         <Layout>
-            Home
             <div className='grid gap-4 grid-cols-4 w-full max-w-screen-lg mb-6'>
                 {
                     items?.map(item => (
@@ -32,8 +33,9 @@ function Home() {
                 }
             </div>
             <ProductDetail />
+            <CheckoutSideMenu />
         </Layout>
   )
 }
 
-export default Home
+export default Home;

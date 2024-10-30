@@ -3,3 +3,14 @@
     height: calc(100vh - 75px);
     top: 68px;
 }
+.p-galleria-content{
+    gap: 5px;
+}
+
+.p-galleria-thumbnail-item-content {
+    width: 85%;
+}
+
+.p-galleria .p-galleria-thumbnail-container {
+    background: white;
+}

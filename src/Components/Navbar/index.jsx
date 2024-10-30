@@ -55,11 +55,11 @@ let menuRight = [
 ]
 
 function Navbar() {
-    const { count } = useContext(ShoppingCartContext);
+    const { count, openCheckoutSideMenu } = useContext(ShoppingCartContext);
 
     const activeStyle = 'underline underline-offset-4';
     return (
-        <nav className='flex justify-between items-center fixed top-0 z-10 w-full py-5 px-8 font-light'>
+        <nav className='flex justify-between items-center fixed top-0 z-10 w-full py-5 px-8 font-light bg-white'>
             <ul className='flex items-center gap-3'>
                 <li className='font-semibold text-lg'>
                     <NavLink to='/'>
@@ -86,7 +86,7 @@ function Navbar() {
                         </NavLink>
                     </li>
                 ))}
-            <li className='flex gap-1'>
+            <li className='flex gap-1 cursor-pointer' onClick={() => openCheckoutSideMenu()}>
                 <ShoppingCartIcon className='size-5'></ShoppingCartIcon>
                  {count}
             </li>
