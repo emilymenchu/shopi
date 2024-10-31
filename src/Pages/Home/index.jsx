@@ -12,6 +12,7 @@ function Home() {
         const fetchData = async () => {
             try {
                 const response = await fetch(urlApi(0, 70));
+                const response = await fetch(urlApi(0, 70));
                 const data = await response.json();
                 setItems(data);
             } catch (e) {
