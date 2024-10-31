@@ -1,12 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { urlApi } from '../../Api';
 import Layout from '../../Components/Layout';
 import Card from '../../Components/Card';
 import ProductDetail from '../../Components/ProductDetail';
 import CheckoutSideMenu from '../../Components/CheckoutSideMenu';
+import { ShoppingCartContext } from '../../Context';
+import { Toast } from 'primereact/toast';
 
 function Home() {
     const [items, setItems] = useState(null);
+
+    const { toast } = useContext(ShoppingCartContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,6 +38,7 @@ function Home() {
             </div>
             <ProductDetail />
             <CheckoutSideMenu />
+            <Toast ref={toast} position="bottom-center" />
         </Layout>
   )
 }

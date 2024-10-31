@@ -1,18 +1,29 @@
-import { createContext, useState } from 'react';
+import { createContext, useRef, useState } from 'react';
 
 export const ShoppingCartContext = createContext();
 
-export const ShoppingCartProvider = ({ children }) => {
-    // Shopping Cart . Increment quantity
-    const [count, setCount] = useState(0);
+export const ShoppingCartProvider = ({ children }) => {   
 
-    // Shopping Cart . Add products to cart
+    // Shopping Cart . Add or Eliminate cart products
     const [cartProducts, setCartProducts] = useState([]);
 
     const addProductToCart = (product) => {
         setCartProducts([...cartProducts, product]);
-        console.log([...cartProducts, product])
+        console.log([...cartProducts, product]);
+        setCount(count + 1); 
+        show('success', 'Success', 'Product added to the cart');
     }
+    
+    const deleteProductOfCart = (id) => {
+        const updatedProducts = cartProducts.filter(product => product.id !== id);
+        setCartProducts(updatedProducts);
+        console.log(updatedProducts);
+        setCount(count - 1); 
+        show('info', 'Info', 'Product removed from the cart');
+    }
+
+    // Shopping Cart . Increment quantity
+    const [count, setCount] = useState(cartProducts.length);
 
     // Checkout-side-menu . state
     const [isCheckoutSideMenuOpen, setIsCheckoutSideMenuOpen] = useState(false);
@@ -35,6 +46,25 @@ export const ShoppingCartProvider = ({ children }) => {
     };
     const closeCheckoutSideMenu = () => setIsCheckoutSideMenuOpen(false);
 
+    // Toast for messages ref
+    const toast = useRef(null);
+    // Function show to display toast
+    const show = (severity, summary, detail) => {
+        toast.current.show({ severity, summary, detail, life: 3000});    
+    };
+
+    // Total items and price 
+    const totalItemsAndPrice = () => {
+        let totalPrice = 0;
+        let totalItems = 0;
+        cartProducts.forEach(product => {
+            totalPrice += (product.price * product.quantity);
+            totalItems += product.quantity;
+        })
+        return { totalPrice, totalItems };
+    }
+
+    console.log(totalItemsAndPrice());
 
     return (
         <ShoppingCartContext.Provider value = {{
@@ -46,10 +76,13 @@ export const ShoppingCartProvider = ({ children }) => {
             productToShow,
             setProductToShow,
             cartProducts,
+            setCartProducts,
             addProductToCart,
             isCheckoutSideMenuOpen,
             openCheckoutSideMenu,
-            closeCheckoutSideMenu
+            closeCheckoutSideMenu,
+            deleteProductOfCart,
+            toast
         }}>
             {children}
         </ShoppingCartContext.Provider>
