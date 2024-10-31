@@ -52,7 +52,6 @@ let menuRight = [
         text: 'Sign in',
         className: ''
     }
-    }
 ]
 
 function Navbar() {
