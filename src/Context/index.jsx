@@ -54,17 +54,38 @@ export const ShoppingCartProvider = ({ children }) => {
     };
 
     // Total items and price 
-    const totalItemsAndPrice = () => {
-        let totalPrice = 0;
-        let totalItems = 0;
+    /**
+     * This function calculates the total price and total items of the products in cart.
+     */
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalItems, setTotalItems] = useState(0);
+    const setTotalItemsAndPrice = () => {
+        let totalPriceCal = 0;
+        let totalItemsCal = 0;
         cartProducts.forEach(product => {
-            totalPrice += (product.price * product.quantity);
-            totalItems += product.quantity;
-        })
-        return { totalPrice, totalItems };
-    }
+            totalPriceCal += (product.price * product.quantity);
+            totalItemsCal += product.quantity;
+        }); 
+        setTotalPrice(totalPriceCal);
+        setTotalItems(totalItemsCal);
+    };
 
-    console.log(totalItemsAndPrice());
+    // Shopping Cart . Order
+    const [order, setOrder] = useState([]);
+
+    // Shopping Cart . Checkout
+    const handleCheckout = () => {
+        if (cartProducts.length > 0) {
+            const orderToAdd = {
+                date: new Date(),
+                products: cartProducts,
+                totalProducts: totalItems,
+                totalPrice: totalPrice
+            }
+            setOrder([...order, orderToAdd])
+            setCartProducts([]);
+        }
+    }
 
     return (
         <ShoppingCartContext.Provider value = {{
@@ -82,7 +103,12 @@ export const ShoppingCartProvider = ({ children }) => {
             openCheckoutSideMenu,
             closeCheckoutSideMenu,
             deleteProductOfCart,
-            toast
+            toast,
+            totalPrice,
+            totalItems,
+            setTotalItemsAndPrice,
+            handleCheckout,
+            order
         }}>
             {children}
         </ShoppingCartContext.Provider>
