@@ -22,7 +22,7 @@ function CheckoutSideMenu () {
                 {
                     cartProducts.length > 0 ? (
                         cartProducts.map(product => (
-                            <OrderCard key={product.id} id={product.id} title={product.title} imageUrl={product.images} price={product.price} quantity={product.quantity}/>
+                            <OrderCard key={product.id} id={product.id} title={product.title} imageUrl={product.images} price={product.price} quantity={product.quantity} ordered={false}/>
                         ))
                      ) : ( <p className='w-[80%] self-center mt-[100%] text-center'>The Cart is empty. Add a product with de + sign.</p>)
                 }

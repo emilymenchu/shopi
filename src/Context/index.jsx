@@ -77,14 +77,33 @@ export const ShoppingCartProvider = ({ children }) => {
     const handleCheckout = () => {
         if (cartProducts.length > 0) {
             const orderToAdd = {
-                date: new Date(),
+                date: parseDate(new Date()),
                 products: cartProducts,
                 totalProducts: totalItems,
                 totalPrice: totalPrice
             }
             setOrder([...order, orderToAdd])
             setCartProducts([]);
+            setCount(0);
         }
+    }
+
+    //Save DateTime function
+    const parseDate = (date) => {
+        const dateString = date.toLocaleDateString('es-ES', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric'
+        });
+        
+        const timeString = date.toLocaleTimeString('es-ES', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+
+        return `${dateString} ${timeString}`;
     }
 
     return (
