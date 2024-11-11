@@ -1,15 +1,13 @@
-import { ShoppingCartContext } from '../../Context';
-import { XMarkIcon } from '@heroicons/react/24/solid';
+import { ChevronRightIcon, ShoppingBagIcon, CalendarDaysIcon, CurrencyDollarIcon } from '@heroicons/react/24/solid';
 import './styles.css';
 import 'primeicons/primeicons.css';
 
 export default function OrdersCard ({date, totalPrice, totalProducts, images}) {
-    // const { cartProducts, setCartProducts, deleteProductOfCart } = useContext(ShoppingCartContext);
     return (
         <div className='flex px-2 justify-center items-center rounded-lg border border-spacing-1 border-gray-100'>
             <div className='flex items-center w-full'>
-                <figure className='relative w-24 h-24 mr-6'>
-                    {images.length >= 3 ?
+                <figure className='relative w-28 h-28 mr-6'>
+                    {images.length >= 2 ?
                         images.slice(0, 3).map((img, index) => (
                             <img
                                 key={index}
@@ -31,14 +29,23 @@ export default function OrdersCard ({date, totalPrice, totalProducts, images}) {
                 </figure>
             </div>
             <div className='flex items-center h-full gap-2'>
-                 <p className='text-sm w-24 font-light line-clamp-3 px-2' >{date}</p>
+                <p className='flex text-sm w-28 font-light line-clamp-3 px-1 gap-1' >
+                    <CalendarDaysIcon className='size-8'></CalendarDaysIcon>
+                    {date}
+                </p>
                     <div className="card flex flex-col justify-content-center">
                         
-                        <p className='flex text-sm font-light'>Quantity: <div className='font-medium px-1'>{totalProducts}</div></p>
-                        <p className='flex text-sm font-light'>Total: <div className='font-medium px-1'>${totalPrice}</div></p>
+                        <p className='flex text-sm font-light gap-1'>
+                            <ShoppingBagIcon className='size-5'></ShoppingBagIcon>
+                            Quantity: 
+                            <div className='font-medium px-1'>{totalProducts}</div></p>
+                        <p className='flex text-sm font-light'>
+                            <CurrencyDollarIcon className='size-5'></CurrencyDollarIcon>
+                            Total: 
+                            <div className='font-medium px-1'>${totalPrice}</div></p>
                     </div>            
-                <button>
-                   <XMarkIcon className='size-5 cursor-pointer'></XMarkIcon>
+                <button className='p-3'>
+                   <ChevronRightIcon className='size-5 cursor-pointer'></ChevronRightIcon>
                 </button>
             </div>
         </div>

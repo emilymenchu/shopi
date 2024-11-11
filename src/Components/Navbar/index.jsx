@@ -10,27 +10,27 @@ let menuLeft = [
         className: ''
     },
     {
-        to: '/clothes',
+        to: '/category/clothes',
         text: 'Clothes',
         className: ''
     },
     {
-        to: '/electronics',
+        to: '/category/electronics',
         text: 'Electronics',
         className: ''
     },
     {
-        to: '/furniture',
+        to: '/category/furniture',
         text: 'Furniture',
         className: ''
     },
     {
-        to: '/toys',
+        to: '/category/toys',
         text: 'Toys',
         className: ''
     },
     {
-        to: '/others',
+        to: '/category/others',
         text: 'Others',
         className: ''
     },
@@ -55,7 +55,7 @@ let menuRight = [
 ]
 
 function Navbar() {
-    const { count, openCheckoutSideMenu } = useContext(ShoppingCartContext);
+    const { count, openCheckoutSideMenu, setCategory } = useContext(ShoppingCartContext);
 
     const activeStyle = 'underline underline-offset-4';
     return (
@@ -67,7 +67,11 @@ function Navbar() {
                     </NavLink>
                 </li>
                 {menuLeft.map(link => (
-                    <li key={link.text} className={link.className}>
+                    <li key={link.text} className={link.className} 
+                    onClick={() => {
+                        link.text === 'All' ? setCategory(null) : setCategory(link.text.toLowerCase());
+                    }}
+                    >
                         <NavLink to={link.to} className={({ isActive }) => isActive ? activeStyle : undefined}>
                             {link.text}
                         </NavLink>

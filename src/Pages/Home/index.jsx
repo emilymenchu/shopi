@@ -1,44 +1,51 @@
-import { useState, useEffect, useContext } from 'react';
-import { urlApi } from '../../Api';
+import { useContext } from 'react';
 import Layout from '../../Components/Layout';
 import Card from '../../Components/Card';
 import ProductDetail from '../../Components/ProductDetail';
 import CheckoutSideMenu from '../../Components/CheckoutSideMenu';
 import { ShoppingCartContext } from '../../Context';
 import { Toast } from 'primereact/toast';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 
 function Home() {
-    const [items, setItems] = useState(null);
 
-    const { toast } = useContext(ShoppingCartContext);
+    const { toast, items, search, query, filteredItems, category } = useContext(ShoppingCartContext);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(urlApi(0, 70));
-                const data = await response.json();
-                setItems(data);
-            } catch (e) {
-                console.error('Ha ocurrido un error al obtener los productos: ' + e);
-            }
+
+    const renderView = () => {
+        const itemsToRender = query?.length > 0 || category?.length > 0 ? filteredItems : items;
+        
+        if (itemsToRender?.length > 0) {
+            return (<div className='grid gap-4 grid-cols-4 w-full max-w-screen-lg mb-6'>
+                        {
+                            itemsToRender.map(item => (
+                                <Card key={item.id} data={item} />
+                            ))
+                        }
+                    </div>)
+        } else {
+             return<p className='w-[80%] self-center mt-[10%] text-center'>No results</p>
         }
-
-        fetchData();
-    }, [])
-    
+    }
 
     return (
         <Layout>
-            <div className='grid gap-4 grid-cols-4 w-full max-w-screen-lg mb-6'>
-                {
-                    items?.map(item => (
-                        <Card key={item.id} data={item} />
-                    ))
-                }
+            <div className='flex m-4 w-96 h-12 justify-center items-center gap-3'>
+                <MagnifyingGlassIcon className='size-7'></MagnifyingGlassIcon>
+                <input 
+                className='border border-gray-500 rounded-lg w-80 h-full p-4 focus:outline-none'
+                type='text' 
+                placeholder='Search'
+                onChange={search}
+                />
             </div>
+            
+                {
+                    renderView()
+                }
             <ProductDetail />
             <CheckoutSideMenu />
-            <Toast ref={toast} position="bottom-center" />
+            <Toast ref={toast} position='bottom-center' />
         </Layout>
   )
 }

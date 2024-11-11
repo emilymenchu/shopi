@@ -1,8 +1,57 @@
-import { createContext, useRef, useState } from 'react';
+import { createContext, useRef, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { urlApi } from '../Api';
+import { parseDate } from '../Utils';
 
 export const ShoppingCartContext = createContext();
 
-export const ShoppingCartProvider = ({ children }) => {   
+export const ShoppingCartProvider = ({ children }) => { 
+    
+    // Get Products
+    const [items, setItems] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(urlApi(0, 70));
+                const data = await response.json();
+                setItems(data);
+            } catch (e) {
+                console.error('Ha ocurrido un error al obtener los productos: ' + e);
+            }
+        }
+
+        fetchData();
+    }, []);
+    
+     //Get Products by search
+    const [filteredItems, setFilteredItems] = useState(null);
+    
+    const [query, setQuery] = useState('');
+
+     const search = (event) => {
+         setQuery(event.target.value);
+     }
+
+     const filterItemsBySearch = (items, query) => {
+        return items?.filter(item => item.title.toLowerCase().includes(query?.toLowerCase()));
+     }
+
+    
+    //  Get Products by Category
+    const [category, setCategory] = useState(null);
+    console.log(category)
+
+    const filterItemsByCategory = (items, category) => {
+        return items?.filter(item => item.category.name.toLowerCase().includes(category?.toLowerCase()));
+    }
+
+
+     useEffect(() => {
+        if (query) setFilteredItems(filterItemsBySearch(items, query));
+        if (category) setFilteredItems(filterItemsByCategory(items, category));
+     }, [items, query, category])
+
 
     // Shopping Cart . Add or Eliminate cart products
     const [cartProducts, setCartProducts] = useState([]);
@@ -77,6 +126,7 @@ export const ShoppingCartProvider = ({ children }) => {
     const handleCheckout = () => {
         if (cartProducts.length > 0) {
             const orderToAdd = {
+                id: crypto.randomUUID(),
                 date: parseDate(new Date()),
                 products: cartProducts,
                 totalProducts: totalItems,
@@ -85,26 +135,11 @@ export const ShoppingCartProvider = ({ children }) => {
             setOrder([...order, orderToAdd])
             setCartProducts([]);
             setCount(0);
+            show('succes', 'Success', 'Purchased Order');
         }
     }
 
-    //Save DateTime function
-    const parseDate = (date) => {
-        const dateString = date.toLocaleDateString('es-ES', {
-            day: 'numeric',
-            month: 'numeric',
-            year: 'numeric'
-        });
-        
-        const timeString = date.toLocaleTimeString('es-ES', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-        });
 
-        return `${dateString} ${timeString}`;
-    }
 
     return (
         <ShoppingCartContext.Provider value = {{
@@ -127,7 +162,14 @@ export const ShoppingCartProvider = ({ children }) => {
             totalItems,
             setTotalItemsAndPrice,
             handleCheckout,
-            order
+            order,
+            items,
+            setItems,
+            search,
+            query,
+            filteredItems,
+            setCategory,
+            category
         }}>
             {children}
         </ShoppingCartContext.Provider>
