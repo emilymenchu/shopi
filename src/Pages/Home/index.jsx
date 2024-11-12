@@ -6,11 +6,18 @@ import CheckoutSideMenu from '../../Components/CheckoutSideMenu';
 import { ShoppingCartContext } from '../../Context';
 import { Toast } from 'primereact/toast';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { useParams } from 'react-router-dom';
 
 function Home() {
 
-    const { toast, items, search, query, filteredItems, category } = useContext(ShoppingCartContext);
+    const { toast, items, search, query, filteredItems, category, setCategory } = useContext(ShoppingCartContext);
 
+    const { categoryName } = useParams();
+
+
+    if ( category === null && (categoryName !== null || categoryName !== undefined)) {
+        setCategory(categoryName)
+    }
 
     const renderView = () => {
         const itemsToRender = query?.length > 0 || category?.length > 0 ? filteredItems : items;
@@ -28,18 +35,20 @@ function Home() {
         }
     }
 
+    console.log('Query: ', query)
+
     return (
         <Layout>
             <div className='flex m-4 w-96 h-12 justify-center items-center gap-3'>
                 <MagnifyingGlassIcon className='size-7'></MagnifyingGlassIcon>
                 <input 
+                value={query === null ? '' : query}
                 className='border border-gray-500 rounded-lg w-80 h-full p-4 focus:outline-none'
                 type='text' 
                 placeholder='Search'
                 onChange={search}
                 />
-            </div>
-            
+            </div>            
                 {
                     renderView()
                 }

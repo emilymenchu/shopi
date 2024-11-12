@@ -1,5 +1,4 @@
 import { createContext, useRef, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { urlApi } from '../Api';
 import { parseDate } from '../Utils';
 
@@ -27,29 +26,51 @@ export const ShoppingCartProvider = ({ children }) => {
      //Get Products by search
     const [filteredItems, setFilteredItems] = useState(null);
     
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState(null);
 
      const search = (event) => {
          setQuery(event.target.value);
      }
 
-     const filterItemsBySearch = (items, query) => {
-        return items?.filter(item => item.title.toLowerCase().includes(query?.toLowerCase()));
-     }
+    //  const filterItemsBySearch = (items, query) => {
+    //     return items?.filter(item => item.title.toLowerCase().includes(query?.toLowerCase()));
+    //  }
 
     
     //  Get Products by Category
     const [category, setCategory] = useState(null);
     console.log(category)
 
-    const filterItemsByCategory = (items, category) => {
-        return items?.filter(item => item.category.name.toLowerCase().includes(category?.toLowerCase()));
-    }
+    // const filterItemsByCategory = (items, category) => {
+    //     return items?.filter(item => item.category.name.toLowerCase().includes(category?.toLowerCase()));
+    // }
+
+    const filterBy = (items, category, query) => {
+        // console.log('Items', items)
+        let toFilter;
+        if (query !== null) {
+            toFilter = items?.filter(item => item.title.toLowerCase().includes(query?.toLowerCase()));
+            // console.log('1. Filtered By Query ', toFilter)
+        }
+
+        console.log('Category ',  category)
+
+        if (category !== null && category !== undefined) {
+            if (query === null){
+                toFilter = items?.filter(item => item.category.name.toLowerCase().includes(category?.toLowerCase()));
+                // console.log('Without Query: ', toFilter)
+            } else {
+                toFilter = toFilter?.filter(item => item.category.name.toLowerCase().includes(category?.toLowerCase()));
+            }
+            // console.log('Filtered By Category: ',  toFilter)
+        }
+        console.log('2. ', toFilter);
+        setFilteredItems(toFilter  ? toFilter : null);
+    };
 
 
      useEffect(() => {
-        if (query) setFilteredItems(filterItemsBySearch(items, query));
-        if (category) setFilteredItems(filterItemsByCategory(items, category));
+        if (query || category) filterBy(items, category, query);
      }, [items, query, category])
 
 
@@ -167,6 +188,7 @@ export const ShoppingCartProvider = ({ children }) => {
             setItems,
             search,
             query,
+            setQuery,
             filteredItems,
             setCategory,
             category
