@@ -9,14 +9,12 @@ function MyOrder() {
   const { order } = useContext(ShoppingCartContext);
 
   const { orderId } = useParams();
-  console.log(orderId);
 
   let products = [];
 
   if (orderId === 'last') {
     products = order?.slice(-1)[0] != undefined ?  order.slice(-1)[0].products : [];
   } else {
-    console.log(order)
     let thisOrder = order.find(obj => obj.id === orderId)
     products = thisOrder?.products ? thisOrder.products  : [];
   }

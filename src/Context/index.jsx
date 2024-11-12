@@ -39,7 +39,6 @@ export const ShoppingCartProvider = ({ children }) => {
     
     //  Get Products by Category
     const [category, setCategory] = useState(null);
-    console.log(category)
 
     // const filterItemsByCategory = (items, category) => {
     //     return items?.filter(item => item.category.name.toLowerCase().includes(category?.toLowerCase()));
@@ -53,8 +52,6 @@ export const ShoppingCartProvider = ({ children }) => {
             // console.log('1. Filtered By Query ', toFilter)
         }
 
-        console.log('Category ',  category)
-
         if (category !== null && category !== undefined) {
             if (query === null){
                 toFilter = items?.filter(item => item.category.name.toLowerCase().includes(category?.toLowerCase()));
@@ -64,7 +61,6 @@ export const ShoppingCartProvider = ({ children }) => {
             }
             // console.log('Filtered By Category: ',  toFilter)
         }
-        console.log('2. ', toFilter);
         setFilteredItems(toFilter  ? toFilter : null);
     };
 
@@ -79,7 +75,6 @@ export const ShoppingCartProvider = ({ children }) => {
 
     const addProductToCart = (product) => {
         setCartProducts([...cartProducts, product]);
-        console.log([...cartProducts, product]);
         setCount(count + 1); 
         show('success', 'Success', 'Product added to the cart');
     }
@@ -87,7 +82,6 @@ export const ShoppingCartProvider = ({ children }) => {
     const deleteProductOfCart = (id) => {
         const updatedProducts = cartProducts.filter(product => product.id !== id);
         setCartProducts(updatedProducts);
-        console.log(updatedProducts);
         setCount(count - 1); 
         show('info', 'Info', 'Product removed from the cart');
     }

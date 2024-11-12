@@ -35,7 +35,6 @@ function Home() {
         }
     }
 
-    console.log('Query: ', query)
 
     return (
         <Layout>
